@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- tailwind css cdn -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <h1 class="font-bold text-3xl text-center">Hello <span class="text-orange-400"><%= user.fullname %>,</span></h1>
+
+    <div class="text-center my-5">
+        <button id="logoutBtn" class="font-medium text-lg text-white bg-red-500 rounded-lg hover:bg-red-600 px-6 py-3">Logout</button>
+    </div>
+
+    <!-- js -->
+     <script src="/js/commonFunction.js"></script>
+     <script src="/js/profile/btn.js"></script>
+</body>
+</html>
