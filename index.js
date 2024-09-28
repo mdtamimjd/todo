@@ -33,17 +33,25 @@ app.get("/profile",isLoggedeIn,async (req,res)=>{
 
 app.post("/registerAccount",async (req,res)=>{
     let {fullname,dob,email,password} = req.body;
-    bcrypt.genSalt(10, function(err, salt) {
-        bcrypt.hash(password, salt,async function(err, hash) {
-            let createUser = await userModel.create({
-                fullname,
-                dob,
-                email,
-                password:hash
-            })
-            res.redirect("/")
+    let checkEmail = await userModel.findOne({email})
+    if(fullname.length < 3 || !isNaN(fullname)){
+        res.redirect("/")
+    } else if(checkEmail){
+        res.redirect("/")
+    }
+    else{
+        bcrypt.genSalt(10, function(err, salt) {
+            bcrypt.hash(password, salt,async function(err, hash) {
+                let createUser = await userModel.create({
+                    fullname,
+                    dob,
+                    email,
+                    password:hash
+                })
+                res.redirect("/")
+            });
         });
-    });
+    }
 
 })
 
@@ -54,7 +62,12 @@ app.post("/loginAccount",async(req,res)=>{
     if(!checkUser){
         res.redirect("/")
     }
+   else{
     bcrypt.compare(passwordLogin, checkUser.password , function(err, result) {
+        if(err){ 
+            console.log(error(err))
+            res.redirect("/")
+        }
         if(result){
             let token = jwt.sign({ email:emailLogin }, 'secret');
             res.cookie("token",token)
@@ -64,6 +77,7 @@ app.post("/loginAccount",async(req,res)=>{
             res.redirect("/")
         }
     });
+   }
 })
 
 function isLoggedeIn(req,res,next){
